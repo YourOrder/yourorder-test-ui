@@ -1,0 +1,199 @@
+<!doctype html>
+<html lang="ru">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>YourOrder Control Panel</title>
+    <link rel="stylesheet" href="./styles.css" />
+  </head>
+  <body>
+    <header class="topbar">
+      <div>
+        <p class="eyebrow">YourOrder / Auth Gateway</p>
+        <h1>Панель тестирования всех контроллеров</h1>
+      </div>
+      <div class="gateway-box">
+        <label>Gateway URL <input id="gatewayUrl" value="http://localhost:8080" /></label>
+        <button id="saveGatewayBtn">Сохранить</button>
+        <button id="healthBtn" class="primary">Health</button>
+      </div>
+    </header>
+
+    <main class="layout wide">
+      <aside class="rail">
+        <section class="panel compact">
+          <div class="panel-title"><h2>ADMIN</h2><span id="adminBadge" class="badge">нет токена</span></div>
+          <form id="adminAuthForm" class="form-grid">
+            <label>Username <input name="username" value="admin_demo" /></label>
+            <label>Email <input name="email" value="admin_demo@mail.local" /></label>
+            <label>Password <input name="password" type="password" value="123456" /></label>
+            <div class="button-row">
+              <button data-auth="register" class="primary">Register</button>
+              <button data-auth="login">Login</button>
+            </div>
+          </form>
+        </section>
+
+        <section class="panel compact">
+          <div class="panel-title"><h2>SUPPLIER</h2><span id="supplierBadge" class="badge">нет токена</span></div>
+          <form id="supplierAuthForm" class="form-grid">
+            <label>Username <input name="username" value="supplier_demo" /></label>
+            <label>Email <input name="email" value="supplier_demo@mail.local" /></label>
+            <label>Password <input name="password" type="password" value="123456" /></label>
+            <div class="button-row">
+              <button data-auth="register" class="primary">Register</button>
+              <button data-auth="login">Login</button>
+            </div>
+          </form>
+        </section>
+
+        <section class="panel compact">
+          <div class="panel-title"><h2>RETAILER</h2><span id="buyerBadge" class="badge">нет токена</span></div>
+          <form id="buyerAuthForm" class="form-grid">
+            <label>Username <input name="username" value="buyer_demo" /></label>
+            <label>Email <input name="email" value="buyer_demo@mail.local" /></label>
+            <label>Password <input name="password" type="password" value="123456" /></label>
+            <div class="button-row">
+              <button data-auth="register" class="primary">Register</button>
+              <button data-auth="login">Login</button>
+            </div>
+          </form>
+        </section>
+
+        <section class="panel compact">
+          <div class="panel-title"><h2>Контекст</h2></div>
+          <label>Активный токен
+            <select id="tokenKind">
+              <option value="admin">ADMIN</option>
+              <option value="supplier">SUPPLIER</option>
+              <option value="buyer">RETAILER</option>
+              <option value="">Без токена</option>
+            </select>
+          </label>
+          <label>Company ID <input id="ctxCompanyId" placeholder="UUID" /></label>
+          <label>Product ID <input id="ctxProductId" placeholder="UUID" /></label>
+          <label>Order ID <input id="ctxOrderId" placeholder="UUID" /></label>
+          <label>User ID <input id="ctxUserId" placeholder="UUID сотрудника" /></label>
+          <div class="split">
+            <label>Page <input id="ctxPage" type="number" min="0" value="0" /></label>
+            <label>Size <input id="ctxSize" type="number" min="1" value="20" /></label>
+          </div>
+          <button id="clearSessionsBtn">Очистить сессии</button>
+        </section>
+      </aside>
+
+      <section class="workspace">
+        <section class="panel">
+          <div class="panel-title"><h2>Auth / Debug</h2><span>/auth, /debug/users</span></div>
+          <div class="actions-grid">
+            <button data-action="debugUsers">GET /debug/users</button>
+            <button data-action="debugMe">GET /debug/users/me</button>
+            <button data-action="refreshAdmin">POST /auth/refresh admin</button>
+            <button data-action="refreshSupplier">POST /auth/refresh supplier</button>
+            <button data-action="refreshBuyer">POST /auth/refresh buyer</button>
+            <button data-action="logoutAdmin">POST /auth/logout admin</button>
+            <button data-action="logoutSupplier">POST /auth/logout supplier</button>
+            <button data-action="logoutBuyer">POST /auth/logout buyer</button>
+          </div>
+        </section>
+
+        <section class="two-col">
+          <article class="panel">
+            <div class="panel-title"><h2>Company Controller</h2><span>/api/seller/companies</span></div>
+            <form id="companyCreateForm" class="form-grid">
+              <label>Название <input name="name" value="Demo Coffee" /></label>
+              <label>Owner ID, optional for ADMIN <input name="ownerId" placeholder="UUID владельца" /></label>
+              <button class="primary">POST создать компанию</button>
+            </form>
+            <div class="actions-grid">
+              <button data-action="allCompanies">GET все компании</button>
+              <button data-action="myCompanies">GET мои компании</button>
+              <button data-action="companyById">GET компания по ID</button>
+              <button data-action="companySellers">GET sellers компании</button>
+            </div>
+            <form id="sellerAddForm" class="form-grid inline-form">
+              <label>User ID <input name="userId" placeholder="UUID" /></label>
+              <button>POST добавить seller</button>
+            </form>
+            <form id="sellerRemoveForm" class="form-grid inline-form">
+              <label>User ID <input name="userId" placeholder="UUID" /></label>
+              <button>DELETE удалить seller</button>
+            </form>
+          </article>
+
+          <article class="panel">
+            <div class="panel-title"><h2>Product Controller</h2><span>/api/seller/products</span></div>
+            <form id="productCreateForm" class="form-grid">
+              <label>Company ID <input name="companyId" placeholder="UUID" /></label>
+              <label>Название <input name="name" value="Cappuccino" /></label>
+              <div class="split">
+                <label>Цена <input name="price" type="number" step="0.01" value="210.00" /></label>
+                <label>Остаток <input name="quantity" type="number" value="20" /></label>
+              </div>
+              <button class="primary">POST создать товар</button>
+            </form>
+            <form id="productUpdateForm" class="form-grid inline-form">
+              <label>Название <input name="name" value="Cappuccino XL" /></label>
+              <label>Цена <input name="price" type="number" step="0.01" value="250.00" /></label>
+              <button>PUT обновить товар</button>
+            </form>
+            <div class="actions-grid">
+              <button data-action="sellerProducts">GET все мои товары</button>
+              <button data-action="sellerProductsByCompany">GET товары компании</button>
+              <button data-action="sellerProductById">GET товар по ID</button>
+              <button data-action="deleteProduct">DELETE товар</button>
+            </div>
+          </article>
+        </section>
+
+        <section class="two-col">
+          <article class="panel">
+            <div class="panel-title"><h2>Customer Products</h2><span>/customer/products</span></div>
+            <div class="actions-grid">
+              <button data-action="customerProducts">GET все товары</button>
+              <button data-action="customerProductsByCompany">GET товары компании</button>
+              <button data-action="customerProductById">GET товар по ID</button>
+            </div>
+            <div id="catalog" class="catalog empty">Каталог появится здесь.</div>
+          </article>
+
+          <article class="panel">
+            <div class="panel-title"><h2>Customer Orders</h2><span>/customer/orders</span></div>
+            <form id="orderCreateForm" class="form-grid">
+              <label>Product ID <input name="productId" placeholder="UUID" /></label>
+              <label>Quantity <input name="quantity" type="number" value="1" /></label>
+              <button class="primary">POST создать заказ</button>
+            </form>
+            <div class="actions-grid">
+              <button data-action="customerOrders">GET мои заказы</button>
+              <button data-action="customerOrderById">GET заказ по ID</button>
+              <button data-action="cancelOrder">PATCH отменить заказ</button>
+              <button data-action="customerCheck">GET /check</button>
+            </div>
+          </article>
+        </section>
+
+        <section class="panel">
+          <div class="panel-title"><h2>Raw запрос</h2><span>любой endpoint через gateway</span></div>
+          <form id="rawForm" class="raw-grid">
+            <label>Method
+              <select name="method">
+                <option>GET</option><option>POST</option><option>PUT</option><option>PATCH</option><option>DELETE</option>
+              </select>
+            </label>
+            <label>Path <input name="path" value="/api/seller/companies" /></label>
+            <label class="span-2">JSON body <textarea name="body" rows="6" placeholder="{ }"></textarea></label>
+            <button class="primary">Отправить raw</button>
+          </form>
+        </section>
+
+        <section class="panel">
+          <div class="panel-title"><h2>Ответ / журнал</h2><button id="clearLogBtn">Очистить</button></div>
+          <pre id="logOutput">Готово.</pre>
+        </section>
+      </section>
+    </main>
+
+    <script src="./app.js"></script>
+  </body>
+</html>
